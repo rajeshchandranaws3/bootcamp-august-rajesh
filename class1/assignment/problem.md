@@ -1,6 +1,6 @@
 ## Shell Scripting Assignment: File Permission Checker
 
-### Problem:
+### Problem Statement:
 Create a script called `check_permissions.sh` that checks if a given file or directory has the correct permissions and ownership. The script should help system administrators quickly verify if files have secure permissions.
 
 ### Task Description:
