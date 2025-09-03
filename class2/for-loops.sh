@@ -1,4 +1,4 @@
-# # for loop basic
+## for loop basic
 # for i in 1 2 3 4 5
 # do
 # echo $i
@@ -17,10 +17,10 @@
 # # Count from 1 to 10
 # for ((i=1; i<=10; i++))
 # do
-#     echo "Number: $i"
+#     echo -n "Number: $i, "
 #     # Calculate square
 #     square=$((i * i))
-#     echo "Square of $i is $square"
+#     echo "Square: $square"
 # done
 
 

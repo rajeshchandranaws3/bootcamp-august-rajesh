@@ -8,3 +8,11 @@
 # echo $a
 # a=`expr $a + 1`
 # done
+
+subject="line1
+hi
+rajesh
+
+how are you"
+
+echo "$subject"
