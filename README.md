@@ -1,1 +1,1 @@
-# bootcamp-aug-rajesh
+# bootcamp-august-rajesh
