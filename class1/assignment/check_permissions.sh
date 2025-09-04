@@ -3,6 +3,10 @@
 # File Permission Checker Script
 # This script checks if a file/directory has correct permissions and ownership
 
+# Store command-line arguments in variables
+FILE_PATH="$1"
+EXPECTED_PERMS="$2"
+
 # Check if user provided correct number of arguments
 if [ $# -ne 2 ]; then
     echo "Usage: $0 <file_path> <expected_permissions>"
@@ -11,20 +15,25 @@ if [ $# -ne 2 ]; then
     exit 3  # Exit code 3 for invalid arguments
 fi
 
-# Store command-line arguments in variables
-FILE_PATH="$1"
-EXPECTED_PERMS="$2"
-
-# Validate permission format (should be 3 octal digits)
-if ! [[ "$EXPECTED_PERMS" =~ ^[0-7]{3}$ ]]; then
-    echo "Error: Invalid permission format '$EXPECTED_PERMS'. Use 3 octal digits (e.g., 644, 755)."
-    exit 3
-fi
-
 # Check if the file/directory exists
 if [ ! -e "$FILE_PATH" ]; then
     echo "❌ Error: File or directory '$FILE_PATH' does not exist."
     exit 2  # Exit code 2 for file not found
+fi
+
+# Validate permission format (should be 3 octal digits)
+# if ! [[ "$EXPECTED_PERMS" =~ ^[0-7]{3}$ ]]; then
+#     echo "Error: Invalid permission format '$EXPECTED_PERMS'. Use 3 octal digits (e.g., 644, 755)."
+#     exit 3
+# fi
+
+# Use grep to check pattern (redirect output to avoid showing matches)
+if echo "$EXPECTED_PERMS" | grep -q '^[0-7][0-7][0-7]$' 2>/dev/null; then
+   echo "Permission format is valid: $EXPECTED_PERMS"
+else
+    echo "ERROR: Invalid permission format: '$EXPECTED_PERMS'"
+    echo "Expected: 3-digit octal format (e.g., 755, 644)"
+    exit 3 # Exit code 3 for invalid arguments
 fi
 
 # Get current user
@@ -58,7 +67,7 @@ fi
 if [ "$FILE_OWNER" = "$CURRENT_USER" ]; then
     echo "✅ File ownership is secure (owned by $CURRENT_USER)"
 else
-    echo "❌ File owned by different user ($FILE_OWNER, current user: $CURRENT_USER)"
+    echo "❌ File owned by different user (actual owner: $FILE_OWNER, current user: $CURRENT_USER)"
     EXIT_CODE=1
 fi
 
@@ -77,16 +86,7 @@ fi
 
 # Check if file is world-readable for sensitive files
 if [ $((OTHERS_PERMS & 4)) -ne 0 ]; then
-    # Check if this might be a sensitive file based on path
-    if [[ "$FILE_PATH" =~ /etc/(passwd|shadow|group|gshadow) ]] || 
-       [[ "$FILE_PATH" =~ \.key$ ]] || 
-       [[ "$FILE_PATH" =~ \.pem$ ]] || 
-       [[ "$FILE_PATH" =~ /\.ssh/ ]]; then
-        echo "⚠️  WARNING: Sensitive file is world-readable!"
-        EXIT_CODE=1
-    else
-        echo "ℹ️  File is world-readable (may be intentional)"
-    fi
+    echo "ℹ️  File is world-readable (may be intentional)"
 else
     echo "✅ File is not world-readable"
 fi
@@ -106,39 +106,20 @@ else
     echo "ℹ️  This is a regular file"
 fi
 
-# Check for setuid/setgid permissions (4-digit permissions)
-FULL_PERMS=$(stat -c %04a "$FILE_PATH" 2>/dev/null)
-if [ ${#FULL_PERMS} -eq 4 ]; then
-    SPECIAL_PERMS=${FULL_PERMS:0:1}
-    if [ "$SPECIAL_PERMS" != "0" ]; then
-        echo "⚠️  WARNING: File has special permissions (setuid/setgid/sticky bit): $FULL_PERMS"
-        if [ $((SPECIAL_PERMS & 4)) -ne 0 ]; then
-            echo "    - Setuid bit is set (runs as file owner)"
-        fi
-        if [ $((SPECIAL_PERMS & 2)) -ne 0 ]; then
-            echo "    - Setgid bit is set (runs as file group)"
-        fi
-        if [ $((SPECIAL_PERMS & 1)) -ne 0 ]; then
-            echo "    - Sticky bit is set"
-        fi
-        # Don't automatically set exit code to 1 for special perms as they might be intentional
-    fi
-fi
-
 # Additional file information
 echo "----------------------------------------"
-echo "File Details:"
-echo "Full permissions: $(stat -c %A "$FILE_PATH")"
+echo "File Details (Complete): $(ls -l "$FILE_PATH")"
+echo "File Permissions: $(stat -c %A "$FILE_PATH")"
 echo "Owner: $(stat -c %U "$FILE_PATH")"
 echo "Group: $(stat -c %G "$FILE_PATH")"
 echo "Size: $(stat -c %s "$FILE_PATH") bytes"
 echo "Last modified: $(stat -c %y "$FILE_PATH")"
 
 echo "----------------------------------------"
-if [ $EXIT_CODE -eq 0 ]; then
-    echo "✅ All permission checks passed!"
-else
-    echo "❌ Permission issues detected!"
-fi
+# if [ $EXIT_CODE -eq 0 ]; then
+#     echo "✅ All permission checks passed!"
+# else
+#     echo "❌ Permission issues detected!"
+# fi
 
-exit $EXIT_CODE
+# exit $EXIT_CODE
