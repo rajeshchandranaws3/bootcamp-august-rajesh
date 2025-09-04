@@ -115,11 +115,3 @@ echo "Group: $(stat -c %G "$FILE_PATH")"
 echo "Size: $(stat -c %s "$FILE_PATH") bytes"
 echo "Last modified: $(stat -c %y "$FILE_PATH")"
 
-echo "----------------------------------------"
-# if [ $EXIT_CODE -eq 0 ]; then
-#     echo "✅ All permission checks passed!"
-# else
-#     echo "❌ Permission issues detected!"
-# fi
-
-# exit $EXIT_CODE
