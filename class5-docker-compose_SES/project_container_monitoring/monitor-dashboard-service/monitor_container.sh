@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Container Monitoring Script
 # Monitors Docker container resources and application health
