@@ -88,8 +88,6 @@ The system consists of the following components:
 
 ```
 # AWS SES Configuration
-AWS_ACCESS_KEY_ID=your_aws_access_key_here
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key_here
 AWS_REGION=ap-south-1
 
 # Email Configuration
