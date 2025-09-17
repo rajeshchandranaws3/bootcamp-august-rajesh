@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Execute this script like ./log_rotator.sh 
+# All the arguments are set in .env-sample file. The Script will read from there.
+
 # Load variables from .env-sample if it exists
 if [ -f .env-sample ]; then
   export $(grep -v '^#' .env-sample | xargs)
