@@ -8,7 +8,7 @@ variable "region" {
 }
 
 variable "prefix" {
-  default = "main"
+  default = "tf"
 }
 
 variable "project" {

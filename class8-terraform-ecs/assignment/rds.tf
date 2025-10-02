@@ -16,30 +16,6 @@ resource "aws_secretsmanager_secret_version" "rds_password" {
   secret_string = jsonencode({ password = random_password.rds_password.result })
 }
 
-// Create a security group for the RDS instance
-resource "aws_security_group" "rds" {
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = [aws_subnet.private1.cidr_block, aws_subnet.private2.cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = merge(
-    local.common_tags,
-    tomap({ "Name" = "${local.prefix}-rds-sg" })
-  )
-}
-
 // Create the RDS PostgreSQL instance
 resource "aws_db_instance" "postgres" {
   identifier             = "${var.db_name}-postgres"
@@ -49,7 +25,7 @@ resource "aws_db_instance" "postgres" {
   allocated_storage      = 30
   username               = var.db_username
   password               = random_password.rds_password.result
-  vpc_security_group_ids = [aws_security_group.rds.id]
+  vpc_security_group_ids = [aws_security_group.rds_sg.id]
   db_subnet_group_name   = aws_db_subnet_group.main.name
   skip_final_snapshot    = true
   #multi_az               = true
