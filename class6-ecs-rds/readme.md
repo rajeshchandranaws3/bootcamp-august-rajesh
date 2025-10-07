@@ -29,18 +29,18 @@ python run.py
 create an ecr repo, either with console, cli
 
 repo name 
-studentportal - url will look like 366140438193.dkr.ecr.ap-south-1.amazonaws.com/studentportal
+studentportal - url will look like 307946636515.dkr.ecr.us-east-1.amazonaws.com/ecs-studentportal
 
 # login to ecr 
-aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 366140438193.dkr.ecr.ap-south-1.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 307946636515.dkr.ecr.us-east-1.amazonaws.com
 
 
 #  docker build and push 
 
 docker build -t student-portal .
 
-docker tag student-portal 366140438193.dkr.ecr.ap-south-1.amazonaws.com/studentportal:1.0
+docker tag student-portal 307946636515.dkr.ecr.us-east-1.amazonaws.com/ecs-studentportal:1.0
 
-docker push 366140438193.dkr.ecr.ap-south-1.amazonaws.com/studentportal:1.0
+docker push 307946636515.dkr.ecr.us-east-1.amazonaws.com/ecs-studentportal:1.0
 
 # now you can use this on ecs to run app
