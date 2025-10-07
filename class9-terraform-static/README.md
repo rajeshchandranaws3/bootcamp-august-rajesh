@@ -150,3 +150,4 @@ Once deployed, the application is accessible at:
 - Create S3 bucket named "state-bucket-307946636515"
 - Create public hosted zone named "rajeshapps.site"
 - Make sure the NS entries are correct in godaddy domain settings
+- skip_final_snapshot   = true

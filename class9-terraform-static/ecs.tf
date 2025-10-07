@@ -20,6 +20,7 @@ resource "aws_ecs_task_definition" "ecs" {
           {
             "containerPort" = 8000
             "hostPort"      = 8000
+            
           }
         ],
         "essential" : true,

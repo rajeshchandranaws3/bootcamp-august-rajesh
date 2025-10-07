@@ -3,7 +3,7 @@
 # rds instance
 
 resource "aws_db_instance" "postgres" {
-  identifier            = "class8-august-rds"
+  identifier            = "class9-august-rds"
   allocated_storage     = 30
   max_allocated_storage = 50
   engine                = "postgres"
@@ -18,7 +18,7 @@ resource "aws_db_instance" "postgres" {
   storage_encrypted     = true
   storage_type          = "gp3"
   kms_key_id            = aws_kms_key.rds_kms.arn
-  skip_final_snapshot   = false
+  skip_final_snapshot   = true
   vpc_security_group_ids = [
     aws_security_group.rds.id
   ]
@@ -49,16 +49,24 @@ resource "random_password" "dbs_random_string" {
   special          = false
   override_special = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 }
-# store the password in secret manager
 
+resource "random_string" "secret_suffix" {
+  length  = 4
+  upper   = false
+  special = false
+}
+
+# store the password in secret manager
 resource "aws_secretsmanager_secret" "db_link" {
-  name                    = "db/${aws_db_instance.postgres.identifier}"
+  #name                    = "db/${aws_db_instance.postgres.identifier}"
+  name                    = "db/${aws_db_instance.postgres.identifier}-${random_string.secret_suffix.result}"
   description             = "DB link"
   kms_key_id              = aws_kms_key.rds_kms.arn
   recovery_window_in_days = 7
   lifecycle {
     create_before_destroy = true
   }
+  depends_on = [ aws_db_instance.postgres ]
 }
 
 resource "aws_secretsmanager_secret_version" "db_link_version" {
