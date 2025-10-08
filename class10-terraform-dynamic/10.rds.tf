@@ -17,7 +17,7 @@ resource "aws_db_instance" "postgres" {
   ca_cert_identifier    = "rds-ca-rsa2048-g1"
   storage_encrypted     = true
   storage_type          = "gp3"
-  kms_key_id            = data.aws_kms_key.rds_kms.arn
+  kms_key_id            = aws_kms_key.rds_kms.arn
   skip_final_snapshot   = true
   vpc_security_group_ids = [
     aws_security_group.rds.id
@@ -36,36 +36,6 @@ resource "aws_db_subnet_group" "postgres" {
   subnet_ids = [aws_subnet.rds_1.id, aws_subnet.rds_2.id]
 }
 
-# RDS security group (inbound port 5432 from ECS SG only)
-
-resource "aws_security_group" "rds" {
-  name        = "${var.environment}-${var.app}-rds-sg"
-  description = "Allow inbound PostgreSQL from ECS only"
-  vpc_id      = aws_vpc.main.id
-
-  # inbound rule from ecs sg only
-  ingress {
-    description     = "PostgreSQL from ECS"
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [aws_security_group.ecs_service_sg.id]
-  }
-
-  # allow all outbound
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.environment}-${var.app}-db Security Group"
-  }
-}
-
-
 
 # password for the master user and secret manager secret
 # create a password -> random provider
@@ -74,16 +44,24 @@ resource "random_password" "dbs_random_string" {
   special          = false
   override_special = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 }
+
+resource "random_string" "secret_suffix" {
+  length  = 4
+  upper   = false
+  special = false
+}
+
 # store the password in secret manager
 
 resource "aws_secretsmanager_secret" "db_link" {
-  name                    = "db/${aws_db_instance.postgres.identifier}"
+  name                    = "db/${aws_db_instance.postgres.identifier}-${random_string.secret_suffix.result}"
   description             = "DB link"
-  kms_key_id              = data.aws_kms_key.rds_kms.arn
+  kms_key_id              = aws_kms_key.rds_kms.arn
   recovery_window_in_days = 7
   lifecycle {
     create_before_destroy = true
   }
+  depends_on = [ random_string.secret_suffix ]
 }
 
 resource "aws_secretsmanager_secret_version" "db_link_version" {

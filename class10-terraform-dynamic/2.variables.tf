@@ -1,5 +1,5 @@
 variable "environment" {
-  description = "The environment for the deployment (e.g., dev, staging, prod)"
+  description = "The environment for the deployment (e.g: dev, stg, prd)"
   type        = string
   #   default     = "dev"
 }
@@ -7,7 +7,7 @@ variable "environment" {
 variable "project_name" {
   description = "The name of the project"
   type        = string
-  default     = "augustbootcamp-studentportal"
+  default     = "august-studentportal"
 }
 
 variable "app" {
@@ -63,11 +63,12 @@ variable "ecs_app_values" {
   default = {
     container_name = "studentportal"
     container_port = "8000"
+    image_name     = "ecs-studentportal:1.0"
     cpu            = "256"
     memory         = "512"
     desired_count  = "1"
     launch_type    = "FARGATE"
-    domain_name    = "akhileshmishra.tech"
+    domain_name    = "rajeshapps.site"
     subdomain_name = "studentportal"
   }
 

@@ -1,5 +1,5 @@
 terraform {
-  required_version = "1.5.7"
+  required_version = ">= 1.5.7"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -15,7 +15,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "ap-south-1"
+  region = "us-east-1"
   default_tags {
     tags = {
       repo         = "August-Terraform"

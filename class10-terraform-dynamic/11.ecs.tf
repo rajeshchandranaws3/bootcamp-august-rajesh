@@ -1,4 +1,4 @@
-# 879381241087.dkr.ecr.ap-south-1.amazonaws.com/ecs-studentportal:1.0
+# 307946636515.dkr.ecr.us-east-1.amazonaws.com/ecs-studentportal:1.0
 
 # ECS cluster
 resource "aws_ecs_cluster" "ecs" {
@@ -14,7 +14,7 @@ resource "aws_ecs_task_definition" "ecs" {
     [
       {
         "name" : "${var.ecs_app_values["container_name"]}",
-        "image" : "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com/ecs-studentportal:1.0",
+        "image" : "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com/${var.ecs_app_values["image_name"]}",
         "portMappings" = [
           {
             "containerPort" = tonumber("${var.ecs_app_values["container_port"]}"),
@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "ecs" {
           "logDriver" : "awslogs",
           "options" : {
             "awslogs-group" : aws_cloudwatch_log_group.ecs.name,
-            "awslogs-region" : data.aws_region.current.name,
+            "awslogs-region" : data.aws_region.current.id,
             "awslogs-stream-prefix" : "ecs"
           },
         },
@@ -78,35 +78,6 @@ resource "aws_ecs_service" "ecs" {
   ]
 
 }
-
-
-# ECS security group (inbound port 8000 from ALB SG only)
-
-resource "aws_security_group" "ecs_service_sg" {
-  name        = "${var.environment}-${var.app}-ecs-sg"
-  description = "Allow inbound traffic on port 8000 from ALB security group"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    description     = "Allow inbound from ALB SG"
-    from_port       = var.ecs_app_values["container_port"]
-    to_port         = var.ecs_app_values["container_port"]
-    protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.environment}-${var.app}-ecs-sg"
-  }
-}
-
 
 # auto-scaling for ecs service
 
