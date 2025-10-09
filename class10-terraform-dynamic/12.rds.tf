@@ -61,7 +61,7 @@ resource "aws_secretsmanager_secret" "db_link" {
   lifecycle {
     create_before_destroy = true
   }
-  depends_on = [ random_string.secret_suffix ]
+  depends_on = [random_string.secret_suffix]
 }
 
 resource "aws_secretsmanager_secret_version" "db_link_version" {
