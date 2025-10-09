@@ -6,7 +6,7 @@ This Terraform project provisions a complete AWS infrastructure for hosting a co
 
 This infrastructure deploys a highly available, scalable web application with the following components:
 
-- **Region**: ap-south-1 (Mumbai)
+- **Region**: us-east-1
 - **Organization**: livingdevops
 - **Team**: august bootcamp
 
@@ -61,9 +61,9 @@ This infrastructure deploys a highly available, scalable web application with th
 - **Security Group**: Allows inbound HTTP/HTTPS from internet
 
 ### DNS & SSL (route53.tf)
-- **Route53 Hosted Zone**: akhileshmishra.tech
-- **DNS Record**: august.akhileshmishra.tech pointing to ALB
-- **ACM Certificate**: SSL certificate for august.akhileshmishra.tech
+- **Route53 Hosted Zone**: rajeshapps.site
+- **DNS Record**: august.rajeshapps.site pointing to ALB
+- **ACM Certificate**: SSL certificate for august.rajeshapps.site
 - **DNS Validation**: Automated via Route53
 
 ### Monitoring (clowdwatch.tf)
@@ -81,9 +81,9 @@ This infrastructure deploys a highly available, scalable web application with th
 
 ## State Management
 
-- **Backend**: S3 bucket `state-bucket-879381241087`
+- **Backend**: S3 bucket `state-bucket-307946636515`
 - **State file**: `august-bootcamp25/terraform.tfstate`
-- **Region**: ap-south-1
+- **Region**: us-east-1
 - **Encryption**: Enabled
 
 ## Prerequisites
@@ -94,9 +94,9 @@ This infrastructure deploys a highly available, scalable web application with th
 4. Existing resources:
    - Elastic IP allocation: `eipalloc-0e0fac707feec10ea`
    - KMS key: `alias/dev-august-batch-rds`
-   - Route53 hosted zone: `akhileshmishra.tech`
-   - ECR repository with image: `879381241087.dkr.ecr.ap-south-1.amazonaws.com/ecs-studentportal:1.0`
-   - S3 bucket for state: `state-bucket-879381241087`
+   - Route53 hosted zone: `rajeshapps.site`
+   - ECR repository with image: `307946636515.dkr.ecr.us-east-1.amazonaws.com/ecs-studentportal:1.0`
+   - S3 bucket for state: `state-bucket-307946636515`
 
 ## Usage
 
@@ -123,8 +123,8 @@ terraform destroy
 ## Application Access
 
 Once deployed, the application is accessible at:
-- **HTTP**: http://august.akhileshmishra.tech
-- **HTTPS**: https://august.akhileshmishra.tech
+- **HTTP**: http://august.rajeshapps.site
+- **HTTPS**: https://august.rajeshapps.site
 
 ## Security Features
 
