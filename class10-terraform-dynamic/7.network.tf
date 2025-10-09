@@ -13,7 +13,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "private_1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.subnet_cidrs[0]
-  availability_zone = "${data.aws_region.current.name}a"
+  availability_zone = "${data.aws_region.current.id}a"
   tags = {
     Name = "${var.environment}-private-sub1"
   }
@@ -22,7 +22,7 @@ resource "aws_subnet" "private_1" {
 resource "aws_subnet" "private_2" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.subnet_cidrs[1]
-  availability_zone = "${data.aws_region.current.name}b"
+  availability_zone = "${data.aws_region.current.id}b"
 
   tags = {
     Name = "${var.environment}-private-sub2"
@@ -89,7 +89,7 @@ resource "aws_route" "private_nat_route" {
 resource "aws_subnet" "public_1" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.subnet_cidrs[2]
-  availability_zone       = "${data.aws_region.current.name}a"
+  availability_zone       = "${data.aws_region.current.id}a"
   map_public_ip_on_launch = true
 
   tags = {
@@ -100,7 +100,7 @@ resource "aws_subnet" "public_1" {
 resource "aws_subnet" "public_2" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.subnet_cidrs[3]
-  availability_zone       = "${data.aws_region.current.name}b"
+  availability_zone       = "${data.aws_region.current.id}b"
   map_public_ip_on_launch = true
 
   tags = {
@@ -153,7 +153,7 @@ resource "aws_route_table_association" "public_2" {
 resource "aws_subnet" "rds_1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.subnet_cidrs[4]
-  availability_zone = "${data.aws_region.current.name}a"
+  availability_zone = "${data.aws_region.current.id}a"
   tags = {
     Name = "${var.environment}-rds-sub1"
   }
@@ -162,7 +162,7 @@ resource "aws_subnet" "rds_1" {
 resource "aws_subnet" "rds_2" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.subnet_cidrs[5]
-  availability_zone = "${data.aws_region.current.name}b"
+  availability_zone = "${data.aws_region.current.id}b"
   tags = {
     Name = "${var.environment}-rds-sub2"
   }

@@ -57,9 +57,10 @@ resource "aws_ecs_service" "ecs" {
   name                       = "${var.environment}-${var.app}-service"
   cluster                    = aws_ecs_cluster.ecs.id
   task_definition            = aws_ecs_task_definition.ecs.arn
-  desired_count              = 2
-  deployment_maximum_percent = 250 # 
+  desired_count              = var.ecs_app_values["desired_count"]
+  deployment_maximum_percent = 200 # 
   launch_type                = var.ecs_app_values["launch_type"]
+  force_new_deployment       = true
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_service_sg.id]
@@ -87,7 +88,7 @@ resource "aws_ecs_service" "ecs" {
 
 resource "aws_appautoscaling_target" "ecs" {
   max_capacity       = 5
-  min_capacity       = 1
+  min_capacity       = 2
   resource_id        = "service/${aws_ecs_cluster.ecs.name}/${aws_ecs_service.ecs.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"

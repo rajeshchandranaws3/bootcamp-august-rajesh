@@ -18,7 +18,7 @@ resource "aws_route53_record" "august_alb" {
   }
 }
 
-# ACM certificate for the domain (ap-south-1 region)
+# ACM certificate for the domain (us-east-1 region)
 resource "aws_acm_certificate" "cert" {
   # "dev.studentportal.rajeshapps.site"
   domain_name       = "${var.environment}.${var.ecs_app_values["subdomain_name"]}.${data.aws_route53_zone.primary.name}"

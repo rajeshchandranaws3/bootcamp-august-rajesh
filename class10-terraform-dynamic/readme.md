@@ -152,6 +152,7 @@ Once deployed, the application is accessible at:
 - Make sure the NS entries are correct in godaddy domain settings
 - During RDS creation, do skip_final_snapshot   = true (For Non-Prod)
 
+
 ## Terraform execution
 
 ### Dev
@@ -174,8 +175,25 @@ Once deployed, the application is accessible at:
 
 `terraform apply -var-file=vars/prod.tfvars`
 
+## Switching the environment & statefile safely
+
+### Step 1: Initialize dev backend
+terraform init -backend-config=vars/dev.tfbackend -reconfigure
+
+### Step 2: Apply dev environment
+terraform apply -var-file=vars/dev.tfvars
+
+### Step 3: Initialize prod backend
+
+### Step 4: Apply prod environment
+terraform apply -var-file=vars/prod.tfvars
 
 
+### ECR Login (For Testing purpose):
+Execute: `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 307946636515.dkr.ecr.us-east-1.amazonaws.com` from cli
+
+
+### docker testing
 
 docker run --rm williamyeh/hey \
   -n 10000 \    # Total requests

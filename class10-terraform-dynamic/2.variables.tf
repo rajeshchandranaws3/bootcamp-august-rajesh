@@ -66,7 +66,7 @@ variable "ecs_app_values" {
     image_name     = "ecs-studentportal:1.0"
     cpu            = "256"
     memory         = "512"
-    desired_count  = "1"
+    desired_count  = "2"
     launch_type    = "FARGATE"
     domain_name    = "rajeshapps.site"
     subdomain_name = "studentportal"
