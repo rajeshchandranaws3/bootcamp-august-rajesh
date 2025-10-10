@@ -189,11 +189,11 @@ terraform apply -var-file=vars/dev.tfvars
 terraform apply -var-file=vars/prod.tfvars
 
 
-### ECR Login (For Testing purpose):
+### ECR Login command (For Testing purpose):
 Execute: `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 307946636515.dkr.ecr.us-east-1.amazonaws.com` from cli
 
 
-### docker testing
+### Load testing using docker container
 
 docker run --rm williamyeh/hey \
   -n 10000 \    # Total requests
