@@ -25,7 +25,7 @@ jobs:
 
   second-job:
     # only run if first job is successful
-    needs: first-job
+    # needs: first-job
     runs-on: windows-latest
     steps:
       - name: show current directory
