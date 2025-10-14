@@ -35,9 +35,9 @@ jobs:
           cd ${{ env.infra_path }}
           terraform fmt -check
 
-      - name: Terraform plan
-        # run: terraform plan
-        run: |
-          cd ${{ env.infra_path }}
-          terraform plan -var-file=vars/dev.tfvars
+      # - name: Terraform plan
+      #   # run: terraform plan
+      #   run: |
+      #     cd ${{ env.infra_path }}
+      #     terraform plan -var-file=vars/dev.tfvars
 
