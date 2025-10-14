@@ -1,4 +1,4 @@
-name: on pr terraform
+name: wf-on-pr-terraform
 
 on: 
   pull_request:

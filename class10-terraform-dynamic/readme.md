@@ -195,6 +195,8 @@ Execute: `aws ecr get-login-password --region us-east-1 | docker login --usernam
 
 ### Load testing using docker container
 
+<!-- verify if these docker containers are existing or not -->
+
 docker run --rm williamyeh/hey \
   -n 10000 \    # Total requests
   -c 200 \      # Concurrent workers
