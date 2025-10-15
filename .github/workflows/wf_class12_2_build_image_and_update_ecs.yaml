@@ -1,10 +1,6 @@
-# https://github.com/akhileshmishrabiz/may-bootcamp/blob/main/.github/workflows/day8-deploy.yaml
 name: wf_class12_2_build_image_and_update_ecs
 
 on:
-  # push:
-  #   branches:
-  #     - main
   workflow_dispatch:
 
 env:
@@ -15,17 +11,16 @@ env:
   app_container: "studentportal"
   aws_account: "307946636515"
   aws_region: "us-east-1"
-  image_tag: ${{ github.sha }}
   docker_file_path: "class6-ecs-rds/Dockerfile"
-
-
+  image_tag: ${{ github.sha }}
+  
 
 jobs:
   build:
     runs-on: ubuntu-latest      
 
     steps:
-      - name: checkout out code
+      - name: checkout the code
         uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
