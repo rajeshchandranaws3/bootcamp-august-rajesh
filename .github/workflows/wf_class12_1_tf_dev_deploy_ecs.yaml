@@ -1,4 +1,4 @@
-name: wf_class12_tf_dev
+name: wf_class12_1_tf_dev_deploy_ecs
 
 on: 
   # push:
