@@ -35,7 +35,7 @@ jobs:
 
       - name: docker build 
         run: |
-          cd ${{ dockerfile_path }}
+          cd ${{ env.dockerfile_path }}
           docker build -t ecsapp .
           docker tag ecsapp ${{ env.ecr_repo }}:${{ env.image_tag }}
 
