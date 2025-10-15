@@ -1,15 +1,17 @@
 name: wf_class10_tf_on_pr
 
 on: 
-  pull_request:
-    branches:
-        - main
-    paths:
-      - 'class10-terraform-dynamic/**'
+  # pull_request:
+  #   branches:
+  #       - main
+  #   paths:
+  #     - 'class10-terraform-dynamic/**'
+  workflow_dispatch:
 
 env:
   terraform_version: 1.5.7 
   infra_path: class10-terraform-dynamic
+
 jobs:
 
   terraform-fmt-and-plan:

@@ -1,4 +1,4 @@
-name: wf_class12_2_build_image_and_update_ecs
+name: wf_class12_2_build_image_update_ecs
 
 on:
   workflow_dispatch:
@@ -11,7 +11,7 @@ env:
   app_container: "studentportal"
   aws_account: "307946636515"
   aws_region: "us-east-1"
-  docker_file_path: "class6-ecs-rds/Dockerfile"
+  dockerfile_path: "class6-ecs-rds/Dockerfile"
   image_tag: ${{ github.sha }}
   
 
@@ -35,7 +35,7 @@ jobs:
 
       - name: docker build 
         run: |
-          cd ${{ docker_file_path }}
+          cd ${{ dockerfile_path }}
           docker build -t ecsapp .
           docker tag ecsapp ${{ env.ecr_repo }}:${{ env.image_tag }}
 
@@ -52,7 +52,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          aws-region: ${{ env.aws_region }}
           
       - name: Download task definition for studentportal
         run: |
