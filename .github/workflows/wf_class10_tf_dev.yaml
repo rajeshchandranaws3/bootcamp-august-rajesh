@@ -1,4 +1,4 @@
-name: terraform dev class10
+name: wf_class10_tf_dev
 
 on: 
   # push:

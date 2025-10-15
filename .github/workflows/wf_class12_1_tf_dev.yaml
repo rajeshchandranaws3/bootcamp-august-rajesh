@@ -1,4 +1,4 @@
-name: terraform dev class12
+name: wf_class12_tf_dev
 
 on: 
   # push:
@@ -42,8 +42,8 @@ jobs:
           cd ${{ env.infra_path }}
           terraform plan -var-file=vars/dev.tfvars
 
-      # - name: Terraform Apply
-      #   # run: terraform plan
-      #   run: |
-      #     cd ${{ env.infra_path }}
-      #     terraform apply -var-file=vars/dev.tfvars --auto-approve
+      - name: Terraform Apply
+        # run: terraform plan
+        run: |
+          cd ${{ env.infra_path }}
+          terraform apply -var-file=vars/dev.tfvars --auto-approve

@@ -1,21 +1,17 @@
-name: wf-on-pr-terraform
+name: wf_tf_destroy
 
 on: 
-  pull_request:
-    branches:
-        - main
-    paths:
-      - 'class10-terraform-dynamic/**'
+  workflow_dispatch:
 
 env:
   terraform_version: 1.5.7 
   infra_path: class10-terraform-dynamic
-jobs:
 
-  terraform-fmt-and-plan:
+jobs:
+  terraform-dev:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout the code
+      - name: checkout
         uses: actions/checkout@v4
 
       - name: Terraform install
@@ -28,16 +24,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ap-south-1
 
-      - name: fmt check
+      - name: Terraform init
+        # run: terraform init
         run: |
           cd ${{ env.infra_path }}
-          terraform fmt -check
+          terraform init -backend-config=vars/dev.tfbackend
 
-      # - name: Terraform plan
-      #   # run: terraform plan
-      #   run: |
-      #     cd ${{ env.infra_path }}
-      #     terraform plan -var-file=vars/dev.tfvars
-
+      - name: Terraform Apply
+        # run: terraform plan
+        run: |
+          cd ${{ env.infra_path }}
+          terraform destroy -var-file=vars/dev.tfvars --auto-approve
