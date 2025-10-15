@@ -1,8 +1,8 @@
 name: first workflow
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 
   # manaual run
   workflow_dispatch:

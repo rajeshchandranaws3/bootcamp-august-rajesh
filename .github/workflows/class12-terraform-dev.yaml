@@ -1,42 +1,19 @@
-name: terraform dev class10
+name: terraform dev class12
 
 on: 
   # push:
   #   branches:
   #     - main
-
+  #   paths:
+  #     - 'class10-terraform-dynamic/**'
   workflow_dispatch:
 
 env:
   terraform_version: 1.5.7 
-  # ${{ env.terraform_version }}
   infra_path: class10-terraform-dynamic
-  # infra_path: class8
 
 jobs:
-
-  terraform-fmt:
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-
-      - name: Terraform install
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ env.terraform_version }}
-
-      - name: fmt check
-        run: |
-          cd ${{ env.infra_path }}
-          terraform fmt -check
-
-
-# ctrl(cmd)+[ -> towrads left 
-# ctrl(cmd)+] -> towrads right 
-# comment - ctrl(cmd) + / -> comment and again Uncomment
   terraform-dev:
-    needs: [terraform-fmt]
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -60,14 +37,13 @@ jobs:
           cd ${{ env.infra_path }}
           terraform init -backend-config=vars/dev.tfbackend
 
-      - name: Terraform plan
-        # run: terraform plan
+      - name: Terraform Plan
         run: |
           cd ${{ env.infra_path }}
           terraform plan -var-file=vars/dev.tfvars
 
-      # download the code to runner
-      # install Terraform
-      # Terraform init
-      # terraform apply
-
+      # - name: Terraform Apply
+      #   # run: terraform plan
+      #   run: |
+      #     cd ${{ env.infra_path }}
+      #     terraform apply -var-file=vars/dev.tfvars --auto-approve
