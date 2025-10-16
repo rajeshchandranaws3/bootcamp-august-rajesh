@@ -1,11 +1,11 @@
 name: wf_class12_1_tf_dev_deploy_ecs
 
 on: 
-  # push:
-  #   branches:
-  #     - main
-  #   paths:
-  #     - 'class10-terraform-dynamic/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'class10-terraform-dynamic/**'
   workflow_dispatch:
 
 env:
