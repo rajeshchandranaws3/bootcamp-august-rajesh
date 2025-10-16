@@ -11,7 +11,7 @@ env:
   app_container: "studentportal"
   aws_account: "307946636515"
   aws_region: "us-east-1"
-  dockerfile_path: "class6-ecs-rds/Dockerfile"
+  dockerfile_path: "class6-ecs-rds"
   image_tag: ${{ github.sha }}
   
 
