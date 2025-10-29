@@ -132,27 +132,6 @@ resource "random_password" "dbs_random_string" {
   override_special = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 }
 
-resource "aws_security_group" "rds" {
-  name        = "${var.environment}-rds-sg"
-  vpc_id      = aws_vpc.main.id
-  description = "allow inbound access from the ECS only"
-
-  ingress {
-    protocol        = "tcp"
-    from_port       = 5432
-    to_port         = 5432
-    cidr_blocks     = ["0.0.0.0/0"]
-    security_groups = [aws_security_group.ecs_tasks_flask.id]
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_db_subnet_group" "postgres" {
   name        = "${var.environment}-${var.app_name}-db-subnet-group"
   description = "Subnet group for RDS instance"

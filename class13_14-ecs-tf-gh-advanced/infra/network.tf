@@ -7,9 +7,6 @@ resource "aws_vpc" "main" {
   }
 }
 
-# count meta argument 
-# you hav
-
 resource "aws_subnet" "public" {
   count                   = 2
   cidr_block              = cidrsubnet(aws_vpc.main.cidr_block, 8, 2 + count.index)
@@ -83,95 +80,4 @@ resource "aws_route_table_association" "private" {
   count          = 2
   subnet_id      = element(aws_subnet.private.*.id, count.index)
   route_table_id = element(aws_route_table.private.*.id, count.index)
-}
-
-resource "aws_security_group" "lb" {
-  name        = "${var.environment}-lb-sg"
-  vpc_id      = aws_vpc.main.id
-  description = "controls access to the Application Load Balancer (ALB)"
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group" "ecs_tasks_flask" {
-  name        = "${var.environment}-ecs-tasks-flask-sg"
-  vpc_id      = aws_vpc.main.id
-  description = "allow inbound access from the ALB only"
-
-  ingress {
-    protocol        = "tcp"
-    from_port       = 8080
-    to_port         = 8080
-    security_groups = [aws_security_group.ecs_tasks_nginx.id]
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-}
-
-resource "aws_security_group" "ecs_tasks_redis" {
-  name        = "${var.environment}-ecs-tasks-redis-sg"
-  vpc_id      = aws_vpc.main.id
-  description = "allow inbound access from the ALB only"
-
-  ingress {
-    protocol        = "tcp"
-    from_port       = 6379
-    to_port         = 6379
-    security_groups = [aws_security_group.ecs_tasks_flask.id]
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-}
-
-resource "aws_security_group" "ecs_tasks_nginx" {
-  name        = "${var.environment}-ecs-tasks-nginx-sg"
-  vpc_id      = aws_vpc.main.id
-  description = "allow inbound access from the ALB only"
-
-  ingress {
-    protocol        = "tcp"
-    from_port       = 80
-    to_port         = 80
-    security_groups = [aws_security_group.lb.id]
-
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
 }
