@@ -93,7 +93,7 @@ variable "nginx_template_file" {
 variable "nginx_aws_ecr_repository" {
   description = "ECR repository URL for the nginx service"
   type        = string
-  default     = "366140438193.dkr.ecr.ap-south-1.amazonaws.com/nginx"
+  default     = "307946636515.dkr.ecr.us-east-1.amazonaws.com/nginx"
 }
 
 variable "nginx_tag" {
@@ -139,7 +139,7 @@ variable "redis_template_file" {
 variable "redis_aws_ecr_repository" {
   description = "ECR repository URL for the redis service"
   type        = string
-  default     = "366140438193.dkr.ecr.ap-south-1.amazonaws.com/redis"
+  default     = "307946636515.dkr.ecr.us-east-1.amazonaws.com/redis"
 }
 
 variable "redis_tag" {

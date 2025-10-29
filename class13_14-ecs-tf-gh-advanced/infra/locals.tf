@@ -80,10 +80,16 @@ locals {
   }
 }
 
+resource "random_string" "secret_suffix" {
+  length  = 4
+  upper   = false
+  special = false
+}
 
 resource "aws_secretsmanager_secret" "app_deploy_data" {
-  name        = "${var.environment}-${var.app_name}-flask-deploy-data"
+  name        = "flask/${var.environment}-${var.app_name}-${random_string.secret_suffix.result}"
   description = "Deployment data for the Flask app"
+  depends_on = [random_string.secret_suffix]
 }
 
 resource "aws_secretsmanager_secret_version" "app_deploy_data_version" {

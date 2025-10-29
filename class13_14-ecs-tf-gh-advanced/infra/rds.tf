@@ -1,6 +1,7 @@
 resource "aws_kms_key" "rds_kms" {
   description             = "KMS key for RDS and Secrets Manager"
   deletion_window_in_days = 10
+  depends_on              = [random_string.secret_suffix]
 
   tags = {
     Name        = "${var.environment}-rds-kms-key"
@@ -107,13 +108,14 @@ resource "aws_rds_cluster_instance" "postgres_reader" {
 
 resource "aws_secretsmanager_secret" "dbs_secret" {
   count                   = var.environment == "dev" ? 1 : 0
-  name                    = "db/${var.environment}-${aws_db_instance.postgres[0].identifier}"
+  name                    = "db/${var.environment}-${aws_db_instance.postgres[0].identifier}-${random_string.secret_suffix.result}"
   description             = "DB link"
   kms_key_id              = aws_kms_key.rds_kms.arn
   recovery_window_in_days = 7
   lifecycle {
     create_before_destroy = true
   }
+  depends_on = [random_string.secret_suffix]
 }
 
 resource "aws_secretsmanager_secret_version" "dbs_secret_val" {
