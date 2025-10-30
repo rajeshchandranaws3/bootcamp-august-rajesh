@@ -15,6 +15,7 @@ on:
 env:
   environment: ${{ github.event.inputs.environment }}
   region: "us-east-1"
+  working_directory: class13_14-ecs-tf-gh-advanced/app
   secret: ${{ github.event.inputs.deploy_secret }}
 
 jobs:
@@ -56,7 +57,7 @@ jobs:
       - name: Build docker container
         uses: docker/build-push-action@v6
         with:
-          context: "{{defaultContext}}:app"
+          context: ${{ env.working_directory }}
           tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           build-args: APP_VERSION=${{ github.sha }}
           push: false
