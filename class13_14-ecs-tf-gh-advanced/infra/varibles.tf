@@ -10,7 +10,7 @@ variable "environment" {
 
 variable "domain_name" {
   type    = string
-  default = "akhileshmishra.tech"
+  default = "rajeshapps.site"
 
 }
 

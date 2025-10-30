@@ -68,11 +68,11 @@ locals {
 
   flask_deploy_data = {
     IMAGE_NAME : "${var.app_name}-image"
-    ECR_REGISTRY : "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
+    ECR_REGISTRY : "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.id}.amazonaws.com"
     ECR_REPOSITORY : "${var.environment}-${var.app_name}-flask"
     ACCOUNT_ID : data.aws_caller_identity.current.account_id
     ECS_CLUSTER : "${var.environment}-${var.app_name}-cluster"
-    ECS_REGION : data.aws_region.current.name
+    ECS_REGION : data.aws_region.current.id
     ECS_SERVICE : "${var.environment}-${var.app_name}-flask-service"
     ECS_TASK_DEFINITION : "${var.environment}-${var.app_name}-flask"
     ECS_APP_CONTAINER_NAME : var.flask_app_container_name
