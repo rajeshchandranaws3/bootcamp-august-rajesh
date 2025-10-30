@@ -1,4 +1,4 @@
-name: TF-Infra Creation for ECS
+name: Infra Deployment for ECS
 
 on:
   workflow_dispatch:
@@ -21,7 +21,6 @@ env:
 
 jobs:
   terraform:
-    name: 'Terraform ${{ env.terraform_action }} on ${{ env.environment }}'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
