@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Variables
-AWS_REGION="ap-south-1"
-AWS_ACCOUNT_ID="879381241087"
+AWS_REGION="us-east-1"
+AWS_ACCOUNT_ID="307946636515"
 environment="dev"
 app_name="app"
 REPOSITORY_NAME_APP="${environment}-${app_name}-flask"
@@ -14,15 +14,32 @@ aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --
 
 # Function to build and push Docker images
 build_and_push() {
-    local service=$1
-    local repository=$2
-    local tag=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$repository:latest
+    local dockerfile_path=$1
+    echo "Dockerfile path: $dockerfile_path"
+    local ecr_repository=$2
+    echo "ECR Repository: $ecr_repository"
+    local ecr_base_url=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+    echo "ECR Base URL: $ecr_base_url"
+    local tag="latest"
+    local image_final_path=$ecr_base_url/$ecr_repository:$tag
+    echo "Final image path: $image_final_path"
+    
 
     echo "Building $service image..."
-    docker buildx build --platform linux/amd64 -t $tag $service
+    docker buildx build --platform linux/amd64 -t $image_final_path $dockerfile_path
+    if [ $? -ne 0 ]; then
+        echo "Docker build failed for $dockerfile_path"
+        exit 1
+    fi
 
-    echo "Pushing $service image to ECR..."
-    docker push $tag
+    echo "Pushing $dockerfile_path image to ECR..."
+    docker push $image_final_path
+    if [ $? -ne 0 ]; then
+        echo "Docker push failed for $image_final_path"
+        exit 1
+    else
+        echo "Successfully pushed $image_final_path"    
+    fi
 }
 
 # Build and push images
