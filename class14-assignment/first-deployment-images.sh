@@ -6,8 +6,7 @@ AWS_ACCOUNT_ID="307946636515"
 environment="dev"
 app_name="app"
 REPOSITORY_NAME_APP="${environment}-${app_name}-flask"
-REPOSITORY_NAME_NGINX="${environment}-${app_name}-nginx"
-REPOSITORY_NAME_REDIS="${environment}-${app_name}-redis"
+REPOSITORY_NAME_FRONTEND="${environment}-${app_name}-react"
 
 # Login to ECR
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
@@ -43,8 +42,7 @@ build_and_push() {
 }
 
 # Build and push images
-build_and_push "app" $REPOSITORY_NAME_APP
-build_and_push "app/nginx" $REPOSITORY_NAME_NGINX
-build_and_push "app/redis" $REPOSITORY_NAME_REDIS
+build_and_push "app/backend" $REPOSITORY_NAME_APP
+build_and_push "app/frontend" $REPOSITORY_NAME_FRONTEND
 
 echo "All images have been built and pushed successfully."
