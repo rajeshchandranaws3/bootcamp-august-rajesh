@@ -83,6 +83,11 @@ variable "flask_allowed_origins" {
   default = "http://localhost:3000,http://localhost:80"
 }
 
+variable "flask_secret_key" {
+  description = "Your secret key - a random string of 64 characters"
+  type        = string
+  default     = "f4a83d7e15e9f8b1c23b4b73f9b09b8827f501bbdce1a3dca7d23d8c991e3f45"
+}
 
 ##### react ####
 

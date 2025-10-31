@@ -31,6 +31,7 @@ locals {
         database_port                 = var.environment == "dev" ? aws_db_instance.postgres[0].port : aws_rds_cluster.postgres[0].port
         flask_app_py                  = var.flask_app_py
         allowed_origins               = var.flask_allowed_origins
+        secret_key                    = var.flask_secret_key
         environment                   = var.environment
       }
     },
@@ -96,3 +97,13 @@ resource "aws_secretsmanager_secret_version" "app_deploy_data_version" {
 # output "ecs_services_map" {
 #   value = local.ecs_service_map
 # }
+
+# output the database address
+output "database_address" {
+  value = aws_db_instance.postgres[0].address
+} 
+
+# output the database name
+output "database_name" {
+  value = aws_db_instance.postgres[0].db_name
+} 
