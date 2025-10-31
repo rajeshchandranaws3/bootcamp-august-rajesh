@@ -22,25 +22,49 @@
     ],
     "environment": [
       {
-        "name": "DB_ADDRESS",
+        "name": "ENV",
+        "value": "${environment}"
+      },
+      {
+        "name": "FLASK_APP",
+        "value": "${flask_app_py}"
+      },
+      {
+        "name": "FLASK_DEBUG",
+        "value": "1"
+      },
+      {
+        "name": "DATABASE_URL",
+        "value": "${database_url}"
+      },
+      {
+        "name": "SECRET_KEY",
+        "value": "${secret_key}"
+      },
+      {
+        "name": "DB_HOST",
         "value": "${database_address}"
       },
-       {
+      {
+        "name": "DB_PORT",
+        "value": "${database_port}"
+      },
+      {
         "name": "DB_NAME",
         "value": "${database_name}"
       },
       {
-        "name": "POSTGRES_USERNAME",
+        "name": "DB_USERNAME",
         "value": "${postgres_username}"
       },
       {
-        "name": "POSTGRES_PASSWORD",
+        "name": "DB_PASSWORD",
         "value": "${postgres_password}"
       },
       {
-        "name": "ENV",
-        "value": "${environment}"
+        "name": "ALLOWED_ORIGINS",
+        "value": "${allowed_origins}"
       }
-    ]
+   ]
   }
 ]

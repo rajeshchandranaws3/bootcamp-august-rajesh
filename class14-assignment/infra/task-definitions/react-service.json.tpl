@@ -25,7 +25,12 @@
       {
         "name": "ENV",
         "value": "${environment}"
+      },
+      {
+        "name": "BACKEND_URL",
+        "value": "${backend_url}"
       }
     ]
   }
 ]
+

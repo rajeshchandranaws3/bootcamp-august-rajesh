@@ -33,7 +33,9 @@ variable "db_default_settings" {
 
 
 ########### microservices #################
+
 #### flask app ####
+
 variable "flask_app_cpu" {
   description = "CPU units for the flask-app service"
   type        = number
@@ -71,7 +73,19 @@ variable "desired_flask_task_count" {
 
 }
 
+variable "flask_app_py" {
+  type    = string
+  default = "run.py"
+}
+
+variable "flask_allowed_origins" {
+  type    = string
+  default = "http://localhost:3000,http://localhost:80"
+}
+
+
 ##### react ####
+
 variable "react_cpu" {
   description = "CPU units for the react service"
   type        = number
@@ -115,48 +129,9 @@ variable "desired_react_task_count" {
 
 }
 
-
-#### redis ######
-
-variable "redis_cpu" {
-  description = "CPU units for the redis service"
-  type        = number
-  default     = 1024
-}
-
-variable "redis_memory" {
-  description = "Memory in MiB for the redis service"
-  type        = number
-  default     = 2048
-}
-
-variable "redis_template_file" {
-  description = "Template file for the redis service"
+variable "react_backend_url" {
+  description = "backend url from react app"
   type        = string
-  default     = "task-definitions/redis-service.json.tpl"
+  default     = "http://app:8000"
 }
 
-variable "redis_aws_ecr_repository" {
-  description = "ECR repository URL for the redis service"
-  type        = string
-  default     = "307946636515.dkr.ecr.us-east-1.amazonaws.com/redis"
-}
-
-variable "redis_tag" {
-  description = "Tag for the redis service"
-  type        = string
-  default     = "latest"
-}
-
-variable "redis_container_name" {
-  description = "Container name for the redis service"
-  type        = string
-  default     = "redis"
-}
-
-variable "desired_redis_task_count" {
-  description = "Desired count for the flask-app tasks"
-  type        = number
-  default     = 2
-
-}

@@ -19,7 +19,7 @@ locals {
       template_file = var.flask_app_template_file
       vars = {
         # aws_ecr_repository            = aws_ecr_repository.python_app.repository_url
-        aws_ecr_repository           = aws_ecr_repository.python_app["flask"].repository_url
+        aws_ecr_repository            = aws_ecr_repository.python_app["flask"].repository_url
         tag                           = var.flask_app_tag
         container_name                = var.flask_app_container_name
         aws_cloudwatch_log_group_name = "/aws/ecs/${var.environment}-flask"
@@ -28,6 +28,9 @@ locals {
         postgres_username             = var.environment == "dev" ? aws_db_instance.postgres[0].username : aws_rds_cluster.postgres[0].master_username
         postgres_password             = random_password.dbs_random_string.result
         database_url                  = var.environment == "dev" ? "postgres://${aws_db_instance.postgres[0].username}:${random_password.dbs_random_string.result}@${aws_db_instance.postgres[0].address}:${aws_db_instance.postgres[0].port}/${aws_db_instance.postgres[0].db_name}" : "postgres://${aws_rds_cluster.postgres[0].master_username}:${random_password.dbs_random_string.result}@${aws_rds_cluster.postgres[0].endpoint}:${aws_rds_cluster.postgres[0].port}/${aws_rds_cluster.postgres[0].database_name}"
+        database_port                 = var.environment == "dev" ? aws_db_instance.postgres[0].port : aws_rds_cluster.postgres[0].port
+        flask_app_py                  = var.flask_app_py
+        allowed_origins               = var.flask_allowed_origins
         environment                   = var.environment
       }
     },
@@ -38,10 +41,11 @@ locals {
       template_file = var.react_template_file
       vars = {
         # aws_ecr_repository            = aws_ecr_repository.react.repository_url
-        aws_ecr_repository           = aws_ecr_repository.python_app["react"].repository_url
+        aws_ecr_repository            = aws_ecr_repository.python_app["react"].repository_url
         tag                           = var.react_tag
         container_name                = var.react_container_name
         aws_cloudwatch_log_group_name = "/aws/ecs/${var.environment}-react"
+        backend_url                   = var.react_backend_url
         environment                   = var.environment
       }
     }
