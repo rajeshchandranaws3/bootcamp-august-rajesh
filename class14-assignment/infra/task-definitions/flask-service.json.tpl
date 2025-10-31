@@ -20,6 +20,11 @@
         "appProtocol": "http"
       }
     ],
+    "command": [
+    "bash",
+    "-c",
+    "sleep 10 && ./migrate.sh && gunicorn --bind 0.0.0.0:8000 run:app"
+    ],
     "environment": [
       {
         "name": "ENV",
@@ -63,7 +68,7 @@
       },
       {
         "name": "ALLOWED_ORIGINS",
-        "value": "${allowed_origins}"
+        "value": "*"
       }
    ]
   }
