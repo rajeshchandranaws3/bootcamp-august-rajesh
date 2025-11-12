@@ -100,15 +100,3 @@ def generate_lambda_report():
 
 # print("---- Generating Lambda Report ----")
 # generate_lambda_report()
-
-
-
-
-
-
-
-
-# list = []
-# list.append(("name", "version", "arn"))
-# list.append(("name", "version", "arn"))
-# print(list)
