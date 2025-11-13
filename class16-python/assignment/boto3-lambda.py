@@ -1,7 +1,7 @@
 import boto3
 
 lambda_client = boto3.client('lambda')
-
+final_results = []
 
 ##### Function to print all lambda functions (name, runtime, and arn) #####
 
@@ -110,6 +110,103 @@ def generate_lambda_report():
         owner = get_lambda_tag_value(arn, 'owner')
         print(f"Lambda Name: {name}, Lambda Version: {version}, owner: {owner}")
 
+print("")
 print("---- Generating Lambda Report ----")
 print("")
 generate_lambda_report()
+
+
+##### Function to update python runtime for all lambdas with specific tag key/value #####
+
+def update_python_runtime(target_runtime, tag_key, tag_value, dry_run=False):
+    """
+    Update all Lambda functions with tag_key=tag_value to the given target_runtime.
+    This version does not use a paginator; it handles pages manually using the
+    Marker/NextMarker pattern so beginners can follow the flow easily.
+
+    Returns a list of tuples: (function_name, old_runtime, new_runtime_or_reason).
+    """
+
+    results = []
+    marker = None
+
+    while True:
+        # Call list_functions, passing Marker when we have one to get the next page
+        if marker:
+            response = lambda_client.list_functions(Marker=marker)
+        else:
+            response = lambda_client.list_functions()
+        
+        # print("List Functions Response:")
+        # print(type(response))
+        # print(len(response))
+        # print(len(response.get('Functions', [])))
+        #print(response)
+
+        functions = response.get('Functions', []) or []
+        functions.sort(key=lambda f: f.get('FunctionName', ''))
+
+        for fn in functions:
+            name = fn.get('FunctionName')
+            arn = fn.get('FunctionArn')
+            runtime = fn.get('Runtime')
+
+            # Get tags for this function (safe with try/except)
+            try:
+                tags = lambda_client.list_tags(Resource=arn).get('Tags') or {}
+            except Exception:
+                tags = {}
+
+            # Check the tag match
+            if tags.get(tag_key) != tag_value:
+                continue
+
+            # If runtime already matches
+            if runtime == target_runtime:
+                results.append((name, runtime, f"already_{target_runtime}"))
+                continue
+
+            # Dry-run prints what would be done
+            if dry_run:
+                print(f"[dry-run] Would update {name}: {runtime} -> {target_runtime}")
+                results.append((name, runtime, "dry-run"))
+                continue
+
+            # Attempt the update
+            try:
+                resp = lambda_client.update_function_configuration(
+                    FunctionName=name,
+                    Runtime=target_runtime
+                )
+                new_runtime = resp.get('Runtime', target_runtime)
+                print(f"Updated {name}: {runtime} -> {new_runtime}")
+                results.append((name, runtime, new_runtime))
+            except Exception as e:
+                print(f"Failed to update {name}: {e}")
+                results.append((name, runtime, f"error: {e}"))
+
+        # Check for next page marker; if none, we're done
+        marker = response.get('NextMarker')
+        if not marker:
+            break
+
+    return results
+
+print("")
+print("---- Updating Python Runtime for Tagged Lambdas ----")
+print("")
+
+target_runtime, tag_key, tag_value = "python3.13", "owner", "cloud"
+
+final_results = update_python_runtime(target_runtime, tag_key, tag_value, dry_run=False)
+
+print("")
+print("Updated Results:")
+print("")
+
+for res in final_results:
+    name, old_runtime, new_runtime  = res
+    print(f"Lambda Name: {name}, Old Runtime: {old_runtime}, New Runtime/Status: {new_runtime}, {tag_key}: {tag_value}")
+    # print(res)
+
+
