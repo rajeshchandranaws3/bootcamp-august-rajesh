@@ -44,3 +44,7 @@ print("Type of file_data_txt:", type(file_data_txt))
 print("Length of file_data_txt:", len(file_data_txt))
 print("-----")
 
+# Clean up created files
+# import os   
+# os.remove("data.json")
+# os.remove("temp.txt")
