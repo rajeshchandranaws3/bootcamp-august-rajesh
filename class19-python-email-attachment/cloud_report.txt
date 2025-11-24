@@ -1,0 +1,31 @@
+{
+    "EC2_DATA": [
+        [
+            "i-05f85bfeb0ba289e8",
+            "t2.micro",
+            "stopped"
+        ]
+    ],
+    "LAMBDA_DATA": [
+        [
+            "lambda_2",
+            "python3.12"
+        ],
+        [
+            "lambda-for-ec2-tag",
+            "python3.14"
+        ],
+        [
+            "lambda_4",
+            "python3.12"
+        ],
+        [
+            "lambda_1",
+            "python3.13"
+        ],
+        [
+            "lambda_3",
+            "python3.13"
+        ]
+    ]
+}
