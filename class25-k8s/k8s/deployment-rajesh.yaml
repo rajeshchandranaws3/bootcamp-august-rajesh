@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-portal
+  namespace: student-portal
+  labels:
+    app: student-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: student-portal
+  template:
+    metadata:
+      labels:
+        app: student-portal
+    spec:
+      
+      # init container to fetch secrets from AWS Secrets Manager
+      initContainers:
+      - name: fetch-secrets
+        image: amazon/aws-cli:latest
+        env:
+        - name: AWS_DEFAULT_REGION
+          value: "us-east-1"
+        command: ["/bin/sh"]
+        args:
+          - -c
+          - |
+            #!/bin/sh
+            set -e
+            
+            echo "Fetching secret from AWS Secrets Manager..."
+            
+            # Fetch the secret value
+            DB_LINK=$(aws secretsmanager get-secret-value \
+              --secret-id db/student-portal/db_link \
+              --region us-east-1 \
+              --query SecretString \
+              --output text | \sed 's/.*"db_link":"\([^"]*\)".*/\1/')
+            
+            mkdir -p /secrets
+            
+            # Write to shared volume
+            echo "DB_LINK=${DB_LINK}" > /secrets/db_link.env
+            
+            echo "Secret fetched and saved successfully to a voulme -> from init container"
+        
+        # volume mount to share secrets
+        volumeMounts:
+        - name: secrets-volume
+          mountPath: /secrets    
+      
+      # image pull secret for ECR
+      imagePullSecrets:
+      - name: ecr-registry-secret          
+      
+      # main application container
+      containers:
+      - name: flask
+        image: 307946636515.dkr.ecr.us-east-1.amazonaws.com/student-portal:1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        command: ["/bin/sh"]
+        args:
+          - -c
+          - |
+            #!/bin/sh
+            # Source the environment file
+            set -a
+            . /secrets/db_link.env
+            set +a
+            
+            # Verify the variable is set
+            echo "DB_LINK environment variable is loaded on app ${DB_LINK}"
+            
+            # Start your Flask application
+            exec python run.py
+        
+        # volume mount to access secrets from init container
+        volumeMounts:
+        - name: secrets-volume
+          mountPath: /secrets
+          readOnly: true
+      
+      # volume to share secrets between init container and main container                
+      volumes:
+      - name: secrets-volume
+        emptyDir:
+          medium: Memory      
