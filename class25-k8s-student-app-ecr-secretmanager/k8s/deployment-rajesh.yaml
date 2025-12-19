@@ -21,6 +21,16 @@ spec:
       - name: fetch-secrets
         image: amazon/aws-cli:latest
         env:
+        - name: CLOUD_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: CLOUD_ACCESS_KEY_ID
+        - name: CLOUD_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: aws-credentials
+              key: CLOUD_SECRET_ACCESS_KEY        
         - name: AWS_DEFAULT_REGION
           value: "us-east-1"
         command: ["/bin/sh"]
