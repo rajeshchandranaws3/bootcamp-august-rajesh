@@ -9,7 +9,8 @@ resource "aws_iam_policy" "ecr_policy" {
   name        = "eksbootacmp-ecr-push-pull-policy"
   description = "Policy to push and pull images from ECR"
 
-  policy = jsonencode({
+  policy = jsonencode(
+    {
     Version = "2012-10-17"
     Statement = [
       {
@@ -17,6 +18,7 @@ resource "aws_iam_policy" "ecr_policy" {
         Action = [
           "ecr:GetAuthorizationToken",
           "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:PutImage",
           "ecr:InitiateLayerUpload",
