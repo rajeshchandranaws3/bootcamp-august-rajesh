@@ -6,7 +6,7 @@ metadata:
   labels:
     app: student-portal
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: student-portal
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: 307946636515.dkr.ecr.us-east-1.amazonaws.com/student-portal:040a980ce6c3ec2928054cd8dd833609dbfa7712
+        image: 879381241087.dkr.ecr.ap-south-1.amazonaws.com/studentportal:2.0 
         imagePullPolicy: Always
         ports:
         - containerPort: 8000

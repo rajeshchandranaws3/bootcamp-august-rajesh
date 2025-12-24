@@ -1,0 +1,49 @@
+name: class27 Build and Push to ECR Using OIDC
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: student-portal
+  IMAGE_TAG: ${{ github.sha }}
+  PATH_TO_BUILD: class27-k8s-eks-oidc-ghaction-terraform/src
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::307946636515:role/eks-github-actions-build-role
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          echo "Building the Docker image... ${{ steps.login-ecr.outputs.registry }}"
+          cd ${{ env.PATH_TO_BUILD }}
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+
+      - name: Push image to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
