@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: 879381241087.dkr.ecr.ap-south-1.amazonaws.com/studentportal:2.0 
+        image: 307946636515.dkr.ecr.us-east-1.amazonaws.com/student-portal:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000

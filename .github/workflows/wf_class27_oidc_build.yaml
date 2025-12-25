@@ -10,7 +10,7 @@ env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: student-portal
   IMAGE_TAG: ${{ github.sha }}
-  PATH_TO_BUILD: class27-k8s-eks-oidc-ghaction-terraform/src
+  PATH_TO_BUILD: class27-k8s-eks-oidc-github-terraform/src
 
 jobs:
   build-and-push:
