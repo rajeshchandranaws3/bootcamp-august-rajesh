@@ -108,7 +108,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 
 
-  public subnet need tag
+  public subnet need appropiate tag
 
   Key=kubernetes.io/role/elb,Value=1
 
