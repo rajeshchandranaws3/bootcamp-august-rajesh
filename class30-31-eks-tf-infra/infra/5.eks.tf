@@ -18,9 +18,10 @@ module "eks" {
 
   # Optional: Adds the current caller identity as an administrator via cluster access entry
   enable_cluster_creator_admin_permissions = true
-
+  
   # vpc configuration
-  vpc_id = module.vpc.vpc_id
+  vpc_id             = module.vpc.vpc_id
+  control_plane_subnet_ids = module.vpc.private_subnets
 
   # Private Subnets for the EKS cluster
   subnet_ids = module.vpc.private_subnets
@@ -29,8 +30,8 @@ module "eks" {
   # EKS Managed Node Group(s)
   eks_managed_node_groups = {
     example = {
-      # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
-      ami_type       = "AL2023_x86_64_STANDARD"
+      # ami_type       = "AL2023_x86_64_STANDARD"
+      ami_type       = "AL2_x86_64"
       instance_types = ["t3.medium"]
 
       min_size     = 1
