@@ -32,7 +32,7 @@ resource "kubernetes_ingress_v1" "app_ingress" {
       "alb.ingress.kubernetes.io/certificate-arn" = aws_acm_certificate.cert.arn
 
       # HTTP to HTTPS redirect action configuration
-      "alb.ingress.kubernetes.io/actions.ssl-redirect" = "{\"Type\": \"redirect\", \"RedirectConfig\": {\"Protocol\": \"HTTPS\", \"Port\": \"443\", \"StatusCode\": \"HTTP_301\"}}"
+      # "alb.ingress.kubernetes.io/actions.ssl-redirect" = "{\"Type\": \"redirect\", \"RedirectConfig\": {\"Protocol\": \"HTTPS\", \"Port\": \"443\", \"StatusCode\": \"HTTP_301\"}}"
     }
   }
 

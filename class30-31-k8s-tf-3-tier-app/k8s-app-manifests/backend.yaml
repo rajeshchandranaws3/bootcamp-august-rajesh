@@ -35,8 +35,9 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: ALLOWED_ORIGINS
-          value: "https://devopsdojo.rajeshapps.site,http://devopsdojo.rajeshapps.site,https://app.rajeshapps.site,http://app.rajeshapps.site"
+        # - name: ALLOWED_ORIGINS
+        #   # value: "https://devopsdojo.rajeshapps.site,http://devopsdojo.rajeshapps.site,https://app.rajeshapps.site,http://app.rajeshapps.site"
+        #   value: "*"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:

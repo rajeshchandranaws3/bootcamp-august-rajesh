@@ -1,14 +1,6 @@
 name: Class31-3tier-Build
 
 on:
-  # push:
-  #   branches:
-  #     - main
-
-#   # run only if some file in 'src' folder was changed
-# - if: steps.changes.outputs.src == 'true'
-#   run: ...
-
   push:
     branches:
       - main
@@ -42,6 +34,13 @@ jobs:
           role-to-assume: arn:aws:iam::307946636515:role/eks-github-actions-build-role
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
+      
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -80,6 +79,13 @@ jobs:
           role-to-assume: arn:aws:iam::307946636515:role/eks-github-actions-build-role
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
+
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr

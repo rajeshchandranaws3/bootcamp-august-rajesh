@@ -31,10 +31,14 @@ spec:
         #   value: devopsdojo
 
         - name: BACKEND_URL
-          value: "http://backend.devopsdojo.svc.cluster.local:8000"
+          # value: "http://backend.devopsdojo.svc.cluster.local:8000"
+          # value: "/api"
+          # value: "https://devopsdojo.rajeshapps.site"
+          value: "https://devopsdojo.rajeshapps.site"
 
-      # this w3ay frontend build a backnd link
-      # backend.namspace.svc.cluster.local
+
+      # this way frontend builds a backend link
+      # backend.namespace.svc.cluster.local
         resources:
           requests:
             memory: "128Mi"
