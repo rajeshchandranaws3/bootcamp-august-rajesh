@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: devopsdozo
+  namespace: devopsdojo
   labels:
     app: backend
 spec:
@@ -25,18 +25,18 @@ spec:
       initContainers:
       - name: wait-for-db
         image: busybox
-        command: ['sh', '-c', 'until nslookup devopsdozo-db-service.devopsdozo.svc.cluster.local; do echo waiting for database; sleep 2; done;']
+        command: ['sh', '-c', 'until nslookup devopsdojo-db-service.devopsdojo.svc.cluster.local; do echo waiting for database; sleep 2; done;']
         # database -> service_name.namespace.svc.cluster.local
         # also databae service -> hostname.port.cluster.local
       containers:
       - name: backend
-        image: 879381241087.dkr.ecr.ap-south-1.amazonaws.com/devopsdozo-backend:latest
+        image: 307946636515.dkr.ecr.us-east-1.amazonaws.com/devopsdojo-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
         env:
         - name: ALLOWED_ORIGINS
-          value: "https://app.akhileshmishra.tech,http://app.akhileshmishra.tech"
+          value: "https://devopsdojo.rajeshapps.site,http://devopsdojo.rajeshapps.site,https://app.rajeshapps.site,http://app.rajeshapps.site"
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
@@ -64,7 +64,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: backend
-  namespace: devopsdozo
+  namespace: devopsdojo
 spec:
   selector:
     app: backend

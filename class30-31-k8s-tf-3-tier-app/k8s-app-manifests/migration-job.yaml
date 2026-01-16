@@ -2,14 +2,14 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: dvopsdozo-migration
-  namespace: devopsdozo
+  namespace: devopsdojo
 spec:
   ttlSecondsAfterFinished: 100
   template:
     spec:
       containers:
       - name: migration
-        image: 879381241087.dkr.ecr.ap-south-1.amazonaws.com/devopsdozo-backend:latest
+        image: 307946636515.dkr.ecr.us-east-1.amazonaws.com/devopsdojo-backend:latest
         imagePullPolicy: Always
 
         command: ["/bin/bash", "-c", "./migrate.sh"]

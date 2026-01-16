@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
-  namespace: devopsdozo
+  namespace: devopsdojo
   labels:
     app: frontend
 spec:
@@ -22,16 +22,16 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: 879381241087.dkr.ecr.ap-south-1.amazonaws.com/devopsdozo-frontend:latest
+        image: 307946636515.dkr.ecr.us-east-1.amazonaws.com/devopsdojo-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
         env:
         # - name: NAMESPACE
-        #   value: devopsdozo
+        #   value: devopsdojo
 
         - name: BACKEND_URL
-          value: "http://backend.devopsdozo.svc.cluster.local:8000"
+          value: "http://backend.devopsdojo.svc.cluster.local:8000"
 
       # this w3ay frontend build a backnd link
       # backend.namspace.svc.cluster.local
@@ -59,7 +59,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend
-  namespace: devopsdozo
+  namespace: devopsdojo
 spec:
   selector:
     app: frontend

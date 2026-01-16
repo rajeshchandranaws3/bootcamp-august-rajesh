@@ -1,7 +1,7 @@
  # 2 private subnet for database
 resource "aws_subnet" "rds_1" {
   cidr_block        = "10.0.7.0/24"
-  availability_zone = "ap-south-1a"
+  availability_zone = "us-east-1a"
   vpc_id            = data.aws_eks_cluster.eks.vpc_config[0]["vpc_id"]
 
   tags = {
@@ -11,7 +11,7 @@ resource "aws_subnet" "rds_1" {
 
 resource "aws_subnet" "rds_2" {
   cidr_block        = "10.0.8.0/24"
-  availability_zone = "ap-south-1b"
+  availability_zone = "us-east-1b"
   vpc_id            = data.aws_eks_cluster.eks.vpc_config[0]["vpc_id"]
 
   tags = {
@@ -22,7 +22,7 @@ resource "aws_subnet" "rds_2" {
 resource "aws_security_group" "rds" {
   name        = "${var.environment}-rds-sg"
   vpc_id      = data.aws_eks_cluster.eks.vpc_config[0]["vpc_id"]
-  description = "allow inbound access from the ECS only"
+  description = "allow inbound access from the EKS only"
 
   ingress {
     protocol        = "tcp"

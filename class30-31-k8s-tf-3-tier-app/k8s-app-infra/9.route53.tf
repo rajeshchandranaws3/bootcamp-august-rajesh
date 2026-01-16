@@ -2,7 +2,7 @@
 
 # cretae/import th public hosted zone for your domain in route53 and update nameservers in your domain registrar
 data "aws_route53_zone" "main" {
-  name         = "akhileshmishra.tech"
+  name         = "rajeshapps.site"
   private_zone = false
 }
 
@@ -22,21 +22,26 @@ data "kubernetes_ingress_v1" "app_ingress_status" {
 
 # cretae a route for subdomain -> ALB (aftr ingress is created in k8s)
 resource "aws_route53_record" "app" {
+  # count = length(
+  #   try(
+  #     data.kubernetes_ingress_v1.app_ingress_status.status[0]
+  #       .load_balancer[0].ingress[0].hostname,
+  #     ""
+  #   )
+  # ) > 0 ? 1 : 0
+
   zone_id = data.aws_route53_zone.main.zone_id
   name    = "${var.app_name}.${data.aws_route53_zone.main.name}"
   type    = "A"
 
   alias {
-    name                   = try(data.kubernetes_ingress_v1.app_ingress_status.status[0].load_balancer[0].ingress[0].hostname, "")
-    zone_id                = "ZP97RAFLXTNZK"  # ap-south-1 ALB zone ID
+    name = data.kubernetes_ingress_v1.app_ingress_status.status[0].load_balancer[0].ingress[0].hostname
 
+    zone_id                = "Z35SXDOTRQ7X7K" # us-east-1 ALB
     evaluate_target_health = true
   }
-
-  depends_on = [
-    data.kubernetes_ingress_v1.app_ingress_status
-  ]
 }
+
 
 
 # need acm cert on subdomain

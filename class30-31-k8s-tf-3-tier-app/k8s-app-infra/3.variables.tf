@@ -3,11 +3,11 @@ variable "environment" {
 }
 
 variable "project" {
-  default = "bootcampclass5"
+  default = "projectk8s"
 }
 
 variable "app_name" {
-  default = "devopsdozo"
+  default = "devopsdojo"
 }
 
 variable "db_default_settings" {

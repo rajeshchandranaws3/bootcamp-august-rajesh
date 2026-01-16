@@ -1,10 +1,10 @@
 resource "kubernetes_namespace" "ns" {
   metadata {
     labels = {
-      mylabel = "simple-nginx"
+      mylabel = "fargate-example"
     }
 
-    name = "simple-nginx"
+    name = "fargate-example"
   }
 }
 
